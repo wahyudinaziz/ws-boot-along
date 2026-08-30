@@ -1,0 +1,37 @@
+import { requireYamadaCore } from "../../yamada.js";
+requireYamadaCore(import.meta.url);
+export const FEATURE_CREDIT = "Fitur By: Anita Putri Azzahra\nFitur SC Bot Yamada MD 👑\nTiktok: https://tiktok.com/@anita.putri.azzah1\nSaluran Resmi: https://whatsapp.com/channel/0029VbDeybN7IUYcO1whiK1k";
+
+
+import { getDatabase } from '../../src/lib/yamada-database.js'
+import config from '../../config.js'
+const pluginConfig = {
+    name: ['disableenergi', 'enableenergi'],
+    alias: ['offenergi', 'onenergi'],
+    category: 'owner',
+    description: 'Enable/disable sistem energi',
+    usage: '.disableenergi atau .enableenergi',
+    example: '.disableenergi',
+    isOwner: true,
+    cooldown: 5,
+    energi: 0,
+    isEnabled: true
+}
+
+async function handler(m) {
+    const db = getDatabase()
+    const cmd = m.command.toLowerCase()
+    const isEnable = ['enableenergi', 'onenergi'].includes(cmd)
+
+    db.setting('energi', isEnable)
+    db.save()
+
+    await m.react(isEnable ? '⚡' : '🔌')
+    return m.reply(
+        isEnable
+            ? '⚡ *sɪsᴛᴇᴍ ᴇɴᴇʀɢɪ ᴅɪᴀᴋᴛɪꜰᴋᴀɴ*\n\n> Setiap command sekarang memerlukan energi.'
+            : '🔌 *sɪsᴛᴇᴍ ᴇɴᴇʀɢɪ ᴅɪɴᴏɴᴀᴋᴛɪꜰᴋᴀɴ*\n\n> Command tidak lagi membutuhkan energi.'
+    )
+}
+
+export { pluginConfig as config, handler }

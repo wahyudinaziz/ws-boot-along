@@ -1,0 +1,32 @@
+import { requireYamadaCore } from "../../yamada.js";
+requireYamadaCore(import.meta.url);
+export const FEATURE_CREDIT = "Fitur By: Anita Putri Azzahra\nFitur SC Bot Yamada MD 👑\nTiktok: https://tiktok.com/@anita.putri.azzah1\nSaluran Resmi: https://whatsapp.com/channel/0029VbDeybN7IUYcO1whiK1k";
+
+
+let handler = async (m, { conn }) => {
+    if (!m.isGroup) return m.reply('❌ Fitur ini hanya bisa digunakan di grup!')
+
+    try {
+        // Ambil link grup terbaru
+        let inviteCode;
+        try {
+            inviteCode = await conn.groupInviteCode(m.chat)
+            inviteCode = `https://chat.whatsapp.com/${inviteCode}`
+        } catch {
+            inviteCode = '❌ Gagal mengambil link grup'
+        }
+
+        m.reply(`*Link Grup:*\n${inviteCode}`)
+    } catch (err) {
+        console.log(err)
+        m.reply('❌ Terjadi kesalahan saat mengambil link grup.')
+    }
+}
+
+handler.help = ['linkgrup']
+handler.tags = ['group']
+handler.command = /^linkgrup$/i
+handler.group = true 
+handler.botAdmin = true
+
+export default handler

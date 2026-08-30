@@ -1,0 +1,32 @@
+import { requireYamadaCore } from "../../yamada.js";
+requireYamadaCore(import.meta.url);
+export const FEATURE_CREDIT = "Fitur By: Anita Putri Azzahra\nFitur SC Bot Yamada MD 👑\nTiktok: https://tiktok.com/@anita.putri.azzah1\nSaluran Resmi: https://whatsapp.com/channel/0029VbDeybN7IUYcO1whiK1k";
+
+
+const pluginConfig = {
+    name: 'stopjpmbasic',
+    alias: ['stopjpmb'],
+    category: 'jpm',
+    description: 'Menghentikan JPM Basic yang sedang berjalan',
+    usage: '.stopjpmbasic',
+    example: '.stopjpmbasic',
+    isOwner: true,
+    isPremium: false,
+    isGroup: false,
+    isPrivate: false,
+    cooldown: 0,
+    energi: 0,
+    isEnabled: true
+}
+
+async function handler(m, { sock }) {
+    if (!global.statusjpmbasic) {
+        return m.reply(`❌ *ɢᴀɢᴀʟ*\n\n> Tidak ada JPM Basic yang sedang berjalan`)
+    }
+    
+    global.stopjpmbasic = true
+    m.react('⏹️')
+    await m.reply(`⏹️ *sᴛᴏᴘ ᴊᴘᴍ ʙᴀsɪᴄ*\n\n> Menghentikan JPM Basic...`)
+}
+
+export { pluginConfig as config, handler };

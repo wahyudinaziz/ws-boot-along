@@ -1,0 +1,37 @@
+import { requireYamadaCore } from "../../yamada.js";
+requireYamadaCore(import.meta.url);
+export const FEATURE_CREDIT = "Fitur By: Anita Putri Azzahra\nFitur SC Bot Yamada MD 👑\nTiktok: https://tiktok.com/@anita.putri.azzah1\nSaluran Resmi: https://whatsapp.com/channel/0029VbDeybN7IUYcO1whiK1k";
+
+
+import safeJson from "../../src/lib/yamada-safe-json.js";
+import fetch from 'node-fetch'
+
+let handler = async (m, { conn, text }) => {
+  await m.react('✨')
+
+  if (!text) {
+    return conn.reply(m.chat, '*Example :* .felo Apa itu bot wa', m)
+  }
+
+  let url = `${global.APIs.faa}/faa/feloai?text=${encodeURIComponent(text)}`
+  let res = await fetch(url)
+  let json = await safeJson(res, { status: false, sources: [] })
+
+  if (!json.status) return
+
+  let sumber = (json.sources || [])
+    .slice(0, 5)
+    .map((v, i) => `${i + 1}. ${v.title}\n${v.url}`)
+    .join('\n\n')
+
+  let hasil = `${json.result.trim()}\n\nSumber:\n${sumber}`
+
+  conn.reply(m.chat, hasil, m)
+}
+
+handler.help = ['felo']
+handler.tags = ['ai']
+handler.command = /^felo$/i
+handler.limit = true
+
+export default handler

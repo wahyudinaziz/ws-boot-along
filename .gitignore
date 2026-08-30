@@ -1,0 +1,21 @@
+.aider*
+
+# Dependencies
+node_modules/
+
+# Secrets
+.env
+.env.local
+
+# Runtime data (contains live WhatsApp session credentials)
+storage/
+session/
+session_voip/
+
+# Database & runtime data
+database/
+temp/
+
+# Logs
+*.log
+npm-debug.log*

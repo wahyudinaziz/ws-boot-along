@@ -1,0 +1,49 @@
+import { requireYamadaCore } from "../../yamada.js";
+requireYamadaCore(import.meta.url);
+export const FEATURE_CREDIT = "Fitur By: Anita Putri Azzahra\nFitur SC Bot Yamada MD 👑\nTiktok: https://tiktok.com/@anita.putri.azzah1\nSaluran Resmi: https://whatsapp.com/channel/0029VbDeybN7IUYcO1whiK1k";
+
+
+import axios from 'axios'
+import { f } from '../../src/lib/yamada-http.js'
+import te from '../../src/lib/yamada-error.js'
+import config from '../../config.js'
+const pluginConfig = {
+    name: 'gita',
+    alias: ['gitagpt', 'bhagavadgita'],
+    category: 'ai',
+    description: 'Chat dengan Gita GPT (Bhagavad Gita AI)',
+    usage: '.gita <pertanyaan>',
+    example: '.gita What is dharma?',
+    isOwner: false,
+    isPremium: false,
+    isGroup: false,
+    isPrivate: false,
+    cooldown: 5,
+    energi: 1,
+    isEnabled: true
+}
+
+async function handler(m, { sock }) {
+    const text = m.args.join(' ')
+    if (!text) {
+        return m.reply(`📿 *ɢɪᴛᴀ ɢᴘᴛ*\n\n> Masukkan pertanyaan\n\n\`Contoh: ${m.prefix}gita What is dharma?\``)
+    }
+
+    m.react('🕕')
+
+    try {
+        const url = `https://api.cuki.biz.id/api/ai/gita?apikey=${config.APIkey.cuki}&q=${encodeURIComponent(text)}`
+        const data = await f(url)
+
+        const content = data.results
+
+        m.react('✅')
+        await m.reply(`${content?.trim()}`)
+
+    } catch (error) {
+        m.react('☢')
+        m.reply(te(m.prefix, m.command, m.pushName))
+    }
+}
+
+export { pluginConfig as config, handler }

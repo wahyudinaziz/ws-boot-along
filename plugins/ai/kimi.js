@@ -1,0 +1,24 @@
+import { requireYamadaCore } from "../../yamada.js";
+requireYamadaCore(import.meta.url);
+export const FEATURE_CREDIT = "Fitur By: Anita Putri Azzahra\nFitur SC Bot Yamada MD 👑\nTiktok: https://tiktok.com/@anita.putri.azzah1\nSaluran Resmi: https://whatsapp.com/channel/0029VbDeybN7IUYcO1whiK1k";
+
+
+let handler = async (m, { conn, text }) => {
+  if (!text) return m.reply('Masukkan pertanyaan!\nContoh: .kimi apa itu bot wa')
+
+  try {
+    let res = await fetch(`https://api.zenzxz.my.id/api/ai/kimi?query=${encodeURIComponent(text)}`)
+    let json = await res.json()
+    let hasil = json?.data?.response || json?.response || 'Tidak ada respons dari AI.'
+    m.reply(hasil)
+  } catch (e) {
+    m.reply('yahh error.')
+  }
+}
+
+handler.help = ['kimi <pertanyaan>']
+handler.tags = ['ai']
+handler.command = /^kimi$/i
+handler.limit = true
+
+export default handler

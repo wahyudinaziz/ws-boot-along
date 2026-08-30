@@ -1,0 +1,39 @@
+import { requireYamadaCore } from "../../yamada.js";
+requireYamadaCore(import.meta.url);
+export const FEATURE_CREDIT = "Fitur By: Anita Putri Azzahra\nFitur SC Bot Yamada MD 👑\nTiktok: https://tiktok.com/@anita.putri.azzah1\nSaluran Resmi: https://whatsapp.com/channel/0029VbDeybN7IUYcO1whiK1k";
+
+
+import safeJson from "../../src/lib/yamada-safe-json.js";
+import fetch from 'node-fetch'
+
+let handler = async (m, { conn, text }) => {
+  await m.react('✨')
+
+  if (!text) {
+    return conn.reply(m.chat, '*Example :* .epsilon Apa itu chatbot', m)
+  }
+
+  let url = `${global.APIs.faa}/faa/epsilon-ai?text=${encodeURIComponent(text)}`
+  let res = await fetch(url)
+  let json = await safeJson(res, { status: false, result: [] })
+
+  if (!json.status || !json.result?.length) return
+
+  let hasil = json.result.slice(0, 5).map((v, i) => `
+${i + 1}. ${v.title}
+Penulis: ${v.authors}
+Tahun: ${v.year}
+Link: ${v.url}
+
+${v.abstract.slice(0, 300)}...
+`.trim()).join('\n\n')
+
+  conn.reply(m.chat, hasil, m)
+}
+
+handler.help = ['epsilon']
+handler.tags = ['ai']
+handler.command = /^epsilon$/i
+handler.limit = true
+
+export default handler

@@ -1,0 +1,38 @@
+import { requireYamadaCore } from "../../yamada.js";
+requireYamadaCore(import.meta.url);
+export const FEATURE_CREDIT = "Fitur By: Anita Putri Azzahra\nFitur SC Bot Yamada MD 👑\nTiktok: https://tiktok.com/@anita.putri.azzah1\nSaluran Resmi: https://whatsapp.com/channel/0029VbDeybN7IUYcO1whiK1k";
+
+
+let handler = async (m, { conn, groupMetadata }) => {
+    let participants = groupMetadata.participants
+    if (participants.length < 2) return m.reply('Anggota kurang 😅')
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1))
+            ;[array[i], array[j]] = [array[j], array[i]]
+        }
+        return array
+    }
+
+    let shuffled = shuffle([...participants])
+    let a = shuffled[0].id
+    let b = shuffled[1].id
+
+    let teks = `◇───── Jadian ─────◇\n\n`
+    teks += `• @${a.split('@')[0]}\n`
+    teks += `• @${b.split('@')[0]}\n`
+    teks += `\nSelamat ❤️`
+
+    conn.sendMessage(m.chat, {
+        text: teks.trim(),
+        mentions: [a, b]
+    }, { quoted: m })
+}
+
+handler.help = ['jadian']
+handler.tags = ['main', 'fun']
+handler.command = ['jadian']
+handler.group = true
+
+export default handler
