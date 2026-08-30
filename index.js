@@ -1,6 +1,7 @@
 import { YAMADA_CORE_CONFIG, YAMADA_DEVELOPER } from "./yamada.js";
 import path from "path";
 import fs from "fs";
+import http from "http";
 import config from "./config.js";
 import { startConnection } from "./src/handler.js";
 import {
@@ -39,6 +40,18 @@ import {
 await import("./src/lib/yamada-agent.js")
   .then((m) => m.initializeAgent())
   .catch(() => { });
+
+// Health-check server so cPanel/Passenger sees the process as "alive".
+// This bot has no web UI of its own - it only talks to WhatsApp over WebSocket.
+const healthPort = process.env.PORT || 3000;
+http
+  .createServer((req, res) => {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("Yamada-MD is running");
+  })
+  .listen(healthPort, () => {
+    console.log(`[health] listening on port ${healthPort}`);
+  });
 
 const LOG_NOISE = new Set([
   "Closing",
